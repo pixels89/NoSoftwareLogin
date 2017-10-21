@@ -10,7 +10,7 @@ import java.io.StringWriter;
 /**
  * Created by mbarman on 10/20/17.
  */
-class ErrorHandler implements View.OnClickListener, Initiable {
+class ErrorHandler implements View.OnClickListener {
 
     private static MainActivity mainActivity;
     private static ErrorHandler instance = null;
@@ -32,8 +32,8 @@ class ErrorHandler implements View.OnClickListener, Initiable {
     private void sendEmail() {
         try {
             Intent email = new Intent(Intent.ACTION_SEND);
-            email.putExtra(Intent.EXTRA_EMAIL, new String[]{"mbarman@salesforce.com"});
-            email.putExtra(Intent.EXTRA_SUBJECT, "Error details");
+            email.putExtra(Intent.EXTRA_EMAIL, new String[]{mainActivity.getString(R.string.reportEmail)});
+            email.putExtra(Intent.EXTRA_SUBJECT, mainActivity.getString(R.string.emailSubject));
 
             StringWriter stringWriter = new StringWriter();
             PrintWriter stackWriter = new PrintWriter(stringWriter);
@@ -49,8 +49,8 @@ class ErrorHandler implements View.OnClickListener, Initiable {
     public void showErrorOnSnackbar(Exception e) {
         exception = e;
         Snackbar errorReportSnackbar = Snackbar.make(mainActivity.findViewById(R.id.mainLayout),
-                "Report error to mbarman@salesforce.com", Snackbar.LENGTH_SHORT);
-        errorReportSnackbar.setAction("Report", this);
+                R.string.reportErrorMessage, Snackbar.LENGTH_SHORT);
+        errorReportSnackbar.setAction(R.string.reportButton, this);
         errorReportSnackbar.setDuration(10000);
         errorReportSnackbar.show();
     }

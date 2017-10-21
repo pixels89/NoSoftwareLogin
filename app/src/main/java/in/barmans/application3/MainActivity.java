@@ -20,8 +20,7 @@ import java.io.InputStreamReader;
 
 public class MainActivity extends AppCompatActivity {
 
-    final String url = "https://expired.badssl.com/";
-    //    final String url = "https://guest.corp.salesforce.com/login.html";
+    private String url = null;
     private ToastDisplay toastDisplay = null;
     private ErrorHandler errorHandler = null;
     private MainActivity instance = null;
@@ -42,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
                 final EditText editText = (EditText) findViewById(R.id.loginPassword);
                 getExistingPassword(editText);
 
+                //url = getString(R.string.badsslUrl);
+                url = getString(R.string.noSoftwareLoginUrl);
                 new CallAPI(instance).execute(url, editText.getText().toString());
                 Button login = (Button) findViewById(R.id.btnLogin);
                 login.setOnClickListener(new View.OnClickListener() {
