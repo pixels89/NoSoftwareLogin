@@ -31,8 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             final MainActivity thisInstance = this;
-            final String url = getString(R.string.badsslUrl);
-            //        final String url = getString(R.string.noSoftwareLoginUrl);
+            final String url = getString(R.string.noSoftwareLoginUrl);
             final Button loginButton = (Button) findViewById(R.id.btnLogin);
             final EditText passwordBox = (EditText) findViewById(R.id.loginPassword);
             final InputMethodManager inputManager = (InputMethodManager)
