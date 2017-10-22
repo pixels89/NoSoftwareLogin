@@ -1,4 +1,4 @@
-package in.barmans.application3;
+package in.barmans.nosoftwarelogin;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ public class ToastDisplay {
     private static ToastDisplay instance = null;
 
 
-    public static ToastDisplay initialize(final Activity activity)  {
+    public static ToastDisplay initialize(final Activity activity) {
 
         messageHandler = new Handler(Looper.getMainLooper()) {
             @Override
@@ -31,7 +31,7 @@ public class ToastDisplay {
         return instance;
     }
 
-    public static ToastDisplay getInstance()  {
+    public static ToastDisplay getInstance() {
         if (instance == null)
             throw new RuntimeException("ToastDisplay should be initialized from MainActivity");
         return instance;

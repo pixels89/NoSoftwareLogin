@@ -1,4 +1,4 @@
-package in.barmans.application3;
+package in.barmans.nosoftwarelogin;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
@@ -6,6 +6,8 @@ import android.view.View;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
+import in.barmans.application3.R;
 
 /**
  * Created by mbarman on 10/20/17.

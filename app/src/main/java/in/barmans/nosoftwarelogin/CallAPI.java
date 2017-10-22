@@ -1,4 +1,4 @@
-package in.barmans.application3;
+package in.barmans.nosoftwarelogin;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -20,6 +20,8 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
+
+import in.barmans.application3.R;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -59,6 +61,7 @@ public class CallAPI extends AsyncTask<String, String, String> {
                 urlConnection = setSslContext(apiUrl);
                 String result = "";
 
+                //TODO: handle streams properly
                 urlConnection.setRequestMethod(mainActivity.getString(R.string.postMethod));
                 BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
@@ -93,7 +96,7 @@ public class CallAPI extends AsyncTask<String, String, String> {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
                 }
-                
+
             }
         } else {
             toastDisplay.showMessage(mainActivity.getString(R.string.enterPassword));

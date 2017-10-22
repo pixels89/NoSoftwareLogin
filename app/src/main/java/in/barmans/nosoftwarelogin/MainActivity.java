@@ -1,4 +1,4 @@
-package in.barmans.application3;
+package in.barmans.nosoftwarelogin;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import in.barmans.application3.R;
 
 
 public class MainActivity extends AppCompatActivity {
