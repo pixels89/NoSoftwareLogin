@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             final EditText passwordBox = (EditText) findViewById(R.id.loginPassword);
             final InputMethodManager inputManager = (InputMethodManager)
                     getSystemService(Context.INPUT_METHOD_SERVICE);
-            ToastDisplay toastDisplay = ToastDisplay.initialize(this);
+            ToastDisplayHandler toastDisplayHandler = ToastDisplayHandler.initialize(this);
 
             passwordBox.requestFocus();
             inputManager.showSoftInput(passwordBox,

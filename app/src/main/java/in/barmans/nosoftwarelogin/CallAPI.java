@@ -31,7 +31,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class CallAPI extends AsyncTask<String, String, String> {
 
-    private ToastDisplay toastDisplay = null;
+    private ToastDisplayHandler toastDisplayHandler = null;
     private Activity mainActivity = null;
     private ErrorHandler errorHandler = null;
 
@@ -39,7 +39,7 @@ public class CallAPI extends AsyncTask<String, String, String> {
     public CallAPI(Activity mainActivity) {
         this.mainActivity = mainActivity;
         errorHandler = ErrorHandler.getInstance();
-        toastDisplay = ToastDisplay.getInstance();
+        toastDisplayHandler = ToastDisplayHandler.getInstance();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CallAPI extends AsyncTask<String, String, String> {
         URL url;
         HttpURLConnection urlConnection = null;
         if (password != null && !password.isEmpty()) {
-            toastDisplay.showMessage(mainActivity.getString(R.string.logingIn));
+            toastDisplayHandler.showMessage(mainActivity.getString(R.string.logingIn));
             String data = mainActivity.getString(R.string.postData) + password;
             try {
                 urlConnection = setSslContext(apiUrl);
@@ -77,7 +77,7 @@ public class CallAPI extends AsyncTask<String, String, String> {
                 reader.close();
 
                 if (true) {
-                    toastDisplay.showMessage(mainActivity.getString(R.string.loggedIn));
+                    toastDisplayHandler.showMessage(mainActivity.getString(R.string.loggedIn));
                     FileOutputStream os = mainActivity.openFileOutput(mainActivity.getString(R.string.passwordFile), MODE_PRIVATE);
                     OutputStreamWriter sw = new OutputStreamWriter(os);
                     sw.write(password);
@@ -85,7 +85,7 @@ public class CallAPI extends AsyncTask<String, String, String> {
                     sw.close();
 
                 } else {
-                    toastDisplay.showMessage(mainActivity.getString(R.string.cantLogin));
+                    toastDisplayHandler.showMessage(mainActivity.getString(R.string.cantLogin));
                 }
             } catch (Exception e) {
                 errorHandler.showErrorOnSnackbar(new Exception("\r\napiUrl: " + apiUrl + "\r\n data: " + data, e.getCause()));
@@ -96,7 +96,7 @@ public class CallAPI extends AsyncTask<String, String, String> {
 
             }
         } else {
-            toastDisplay.showMessage(mainActivity.getString(R.string.enterPassword));
+            toastDisplayHandler.showMessage(mainActivity.getString(R.string.enterPassword));
         }
         return null;
     }

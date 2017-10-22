@@ -11,14 +11,13 @@ import android.widget.Toast;
  * Created by mbarman on 10/20/17.
  */
 
-public class ToastDisplay {
+public class ToastDisplayHandler {
 
-    private static Handler messageHandler;
-    private static ToastDisplay instance = null;
+    private static Handler messageHandler = null;
+    private static ToastDisplayHandler instance = null; //TODO: not thread safe
 
 
-    public static ToastDisplay initialize(final Activity activity) {
-
+    public static ToastDisplayHandler initialize(final Activity activity) {
         messageHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message message) {
@@ -27,18 +26,17 @@ public class ToastDisplay {
                 toast.show();
             }
         };
-        instance = new ToastDisplay();
-        return instance;
+        instance = new ToastDisplayHandler();
+        return getInstance();
     }
 
-    public static ToastDisplay getInstance() {
+    public static ToastDisplayHandler getInstance() {
         if (instance == null)
             throw new RuntimeException("ToastDisplay should be initialized from MainActivity");
         return instance;
     }
 
     public void showMessage(String messageString) {
-
         Bundle bundle = new Bundle();
         bundle.putCharSequence("message", messageString);
         Message message = messageHandler.obtainMessage(1, bundle);

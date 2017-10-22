@@ -45,7 +45,7 @@ class ErrorHandler implements View.OnClickListener {
             email.setType("message/rfc822");
             mainActivity.startActivity(Intent.createChooser(email, "Choose an Email client :"));
         } catch (Exception e) {
-            ToastDisplay.getInstance().showMessage(e.getMessage());
+            ToastDisplayHandler.getInstance().showMessage(e.getMessage());
         }
     }
 
