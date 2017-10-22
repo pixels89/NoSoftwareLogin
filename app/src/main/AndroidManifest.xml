@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="in.barmans.nosoftwarelogin.MainActivity"
+            android:name="in.barmans.nosoftwarelogin.activity.MainActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateVisible"
             android:theme="@style/AppTheme.NoActionBar">
