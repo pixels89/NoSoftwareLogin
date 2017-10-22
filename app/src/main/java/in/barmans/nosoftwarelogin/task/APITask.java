@@ -1,4 +1,4 @@
-package in.barmans.nosoftwarelogin;
+package in.barmans.nosoftwarelogin.task;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -19,6 +19,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 import in.barmans.application3.R;
+import in.barmans.nosoftwarelogin.service.ErrorHandler;
+import in.barmans.nosoftwarelogin.service.ToastDisplayHandler;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -26,14 +28,14 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by mbarman on 10/20/17.
  */
 
-public class CallAPI extends AsyncTask<String, String, String> {
+public class APITask extends AsyncTask<String, String, String> {
 
     private ToastDisplayHandler toastDisplayHandler = null;
     private Activity mainActivity = null;
     private ErrorHandler errorHandler = null;
 
 
-    public CallAPI(Activity mainActivity) {
+    public APITask(Activity mainActivity) {
         this.mainActivity = mainActivity;
         errorHandler = ErrorHandler.getInstance();
         toastDisplayHandler = ToastDisplayHandler.getInstance();

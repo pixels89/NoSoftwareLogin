@@ -1,4 +1,4 @@
-package in.barmans.nosoftwarelogin;
+package in.barmans.nosoftwarelogin.service;
 
 import android.app.Activity;
 import android.os.Bundle;

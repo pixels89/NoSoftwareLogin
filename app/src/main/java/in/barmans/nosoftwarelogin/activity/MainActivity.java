@@ -1,4 +1,4 @@
-package in.barmans.nosoftwarelogin;
+package in.barmans.nosoftwarelogin.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import in.barmans.application3.R;
+import in.barmans.nosoftwarelogin.task.APITask;
+import in.barmans.nosoftwarelogin.service.ErrorHandler;
+import in.barmans.nosoftwarelogin.service.ToastDisplayHandler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,14 +43,14 @@ public class MainActivity extends AppCompatActivity {
             passwordBox.requestFocus();
             setPasswordBoxToExistingPassword(passwordBox);
 
-            new CallAPI(thisInstance).execute(url, passwordBox.getText().toString());
+            new APITask(thisInstance).execute(url, passwordBox.getText().toString());
 
             loginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
                             InputMethodManager.HIDE_NOT_ALWAYS);
-                    new CallAPI(thisInstance).execute(url, passwordBox.getText().toString());
+                    new APITask(thisInstance).execute(url, passwordBox.getText().toString());
                 }
             });
         } catch (Exception e) {

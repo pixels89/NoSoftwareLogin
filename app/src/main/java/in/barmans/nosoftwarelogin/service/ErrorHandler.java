@@ -1,4 +1,4 @@
-package in.barmans.nosoftwarelogin;
+package in.barmans.nosoftwarelogin.service;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,11 +9,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import in.barmans.application3.R;
+import in.barmans.nosoftwarelogin.activity.MainActivity;
 
 /**
  * Created by mbarman on 10/20/17.
  */
-class ErrorHandler implements View.OnClickListener {
+public class ErrorHandler implements View.OnClickListener {
 
     private static Activity mainActivity = null;
     private static ErrorHandler instance = null;
