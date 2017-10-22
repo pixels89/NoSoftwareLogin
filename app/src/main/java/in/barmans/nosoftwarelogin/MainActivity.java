@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } catch (Exception e) {
-            errorHandler.showErrorOnSnackbar(e);
+            errorHandler.showPromptOnSnackbar(e);
         }
     }
 

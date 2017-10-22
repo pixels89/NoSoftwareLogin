@@ -4,18 +4,15 @@ import android.app.Activity;
 import android.os.AsyncTask;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -49,46 +46,43 @@ public class CallAPI extends AsyncTask<String, String, String> {
     }
 
     private String authenticate(String apiUrl, String password) {
-        URL url;
         HttpURLConnection urlConnection = null;
-        if (password != null && !password.isEmpty()) {
+        if (password != null && !password.isEmpty() && apiUrl != null && !apiUrl.isEmpty()) {
             toastDisplayHandler.showMessage(mainActivity.getString(R.string.logingIn));
             String data = mainActivity.getString(R.string.postData) + password;
             try {
                 urlConnection = setSslContext(apiUrl);
-                String result = "";
 
                 //TODO: handle streams properly
                 urlConnection.setRequestMethod(mainActivity.getString(R.string.postMethod));
                 BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
-
                 writer.write(data);
                 writer.flush();
                 writer.close();
 
-                InputStream in = urlConnection.getInputStream();
-                InputStreamReader isw = new InputStreamReader(in);
-                BufferedReader reader = new BufferedReader(isw);
-                String read = "";
-                while ((read = reader.readLine()) != null) {
-                    result += read;
-                }
-                reader.close();
+//                String result = "";
+//                InputStream in = urlConnection.getInputStream();
+//                InputStreamReader isw = new InputStreamReader(in);
+//                BufferedReader reader = new BufferedReader(isw);
+//                String read = "";
+//                while ((read = reader.readLine()) != null) {
+//                    result += read;
+//                }
+//                reader.close();
 
-                if (true) {
+                if (urlConnection.getResponseCode() == 200) {
                     toastDisplayHandler.showMessage(mainActivity.getString(R.string.loggedIn));
                     FileOutputStream os = mainActivity.openFileOutput(mainActivity.getString(R.string.passwordFile), MODE_PRIVATE);
                     OutputStreamWriter sw = new OutputStreamWriter(os);
                     sw.write(password);
                     sw.flush();
                     sw.close();
-
                 } else {
                     toastDisplayHandler.showMessage(mainActivity.getString(R.string.cantLogin));
                 }
             } catch (Exception e) {
-                errorHandler.showErrorOnSnackbar(new Exception("\r\napiUrl: " + apiUrl + "\r\n data: " + data, e.getCause()));
+                errorHandler.showPromptOnSnackbar(new Exception("\r\napiUrl: " + apiUrl + "\r\n data: " + data, e.getCause()));
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -103,12 +97,11 @@ public class CallAPI extends AsyncTask<String, String, String> {
 
     private HttpURLConnection setSslContext(String urlString) throws Exception {
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
-        InputStream caInput = mainActivity.getResources().openRawResource(R.raw.nosoftware);
+        InputStream caInput = mainActivity.getResources().openRawResource(R.raw.nosoftwarecrt);
 
         Certificate ca;
         try {
             ca = cf.generateCertificate(caInput);
-            System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
         } finally {
             caInput.close();
         }

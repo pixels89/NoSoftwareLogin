@@ -49,7 +49,7 @@ class ErrorHandler implements View.OnClickListener {
         }
     }
 
-    public void showErrorOnSnackbar(Exception e) {
+    public void showPromptOnSnackbar(Exception e) {
         exception = e;
         Snackbar errorReportSnackbar = Snackbar.make(mainActivity.findViewById(R.id.mainLayout),
                 R.string.reportErrorMessage, Snackbar.LENGTH_SHORT);
