@@ -34,13 +34,10 @@ public class MainActivity extends AppCompatActivity {
             final String url = getString(R.string.noSoftwareLoginUrl);
             final Button loginButton = (Button) findViewById(R.id.btnLogin);
             final EditText passwordBox = (EditText) findViewById(R.id.loginPassword);
-            final InputMethodManager inputManager = (InputMethodManager)
-                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            final InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             ToastDisplayHandler toastDisplayHandler = ToastDisplayHandler.initialize(this);
 
             passwordBox.requestFocus();
-            inputManager.showSoftInput(passwordBox,
-                    InputMethodManager.SHOW_IMPLICIT);
             setPasswordBoxToExistingPassword(passwordBox);
 
             new CallAPI(thisInstance).execute(url, passwordBox.getText().toString());
