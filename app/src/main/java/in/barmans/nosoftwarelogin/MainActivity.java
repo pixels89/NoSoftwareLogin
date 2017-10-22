@@ -19,63 +19,50 @@ import java.io.InputStreamReader;
 
 import in.barmans.application3.R;
 
-
 public class MainActivity extends AppCompatActivity {
-
-    private String url = null;
-    private ToastDisplay toastDisplay = null;
-    private ErrorHandler errorHandler = null;
-    private MainActivity instance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        instance = this;
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ErrorHandler errorHandler = ErrorHandler.initialize(this);
 
         try {
-            errorHandler = ErrorHandler.initialize(this);
-            toastDisplay = ToastDisplay.initialize(this);
-            try {
-                final EditText editText = (EditText) findViewById(R.id.loginPassword);
-                getExistingPassword(editText);
+            final MainActivity thisInstance = this;
+            final String url = getString(R.string.badsslUrl);
+            //        final String url = getString(R.string.noSoftwareLoginUrl);
+            final Button loginButton = (Button) findViewById(R.id.btnLogin);
+            final EditText passwordBox = (EditText) findViewById(R.id.loginPassword);
+            final InputMethodManager inputManager = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            ToastDisplay toastDisplay = ToastDisplay.initialize(this);
 
-                //url = getString(R.string.badsslUrl);
-                url = getString(R.string.noSoftwareLoginUrl);
-                new CallAPI(instance).execute(url, editText.getText().toString());
-                Button login = (Button) findViewById(R.id.btnLogin);
-                login.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        InputMethodManager inputManager = (InputMethodManager)
-                                getSystemService(Context.INPUT_METHOD_SERVICE);
+            passwordBox.requestFocus();
+            inputManager.showSoftInput(passwordBox,
+                    InputMethodManager.SHOW_IMPLICIT);
+            setPasswordBoxToExistingPassword(passwordBox);
 
-                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                                InputMethodManager.HIDE_NOT_ALWAYS);
-                        new CallAPI(instance).execute(url, editText.getText().toString());
-                    }
-                });
-            } catch (Exception e) {
-                errorHandler.showErrorOnSnackbar(e);
-            } finally {
-                try {
-                } catch (Exception e) {
-                } finally {
+            new CallAPI(thisInstance).execute(url, passwordBox.getText().toString());
+
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                    new CallAPI(thisInstance).execute(url, passwordBox.getText().toString());
                 }
-            }
+            });
         } catch (Exception e) {
             errorHandler.showErrorOnSnackbar(e);
         }
     }
 
-
-    private void getExistingPassword(EditText editText) throws IOException {
+    private void setPasswordBoxToExistingPassword(EditText editText) {
         BufferedReader reader = null;
         try {
-            FileInputStream is = openFileInput("loginDetails");
+            FileInputStream is = openFileInput(getString(R.string.passwordFile));
             reader = new BufferedReader(new InputStreamReader(is));
 
             StringBuilder sb = new StringBuilder();
@@ -89,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
                 editText.setText(existingPass);
             }
         } catch (FileNotFoundException e) {
+            //its okay
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+
         }
     }
 
@@ -113,6 +104,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }

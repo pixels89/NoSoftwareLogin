@@ -1,5 +1,6 @@
 package in.barmans.nosoftwarelogin;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -14,9 +15,9 @@ import in.barmans.application3.R;
  */
 class ErrorHandler implements View.OnClickListener {
 
-    private static MainActivity mainActivity;
+    private static Activity mainActivity = null;
     private static ErrorHandler instance = null;
-    private Exception exception;
+    private Exception exception = null; //TODO:will fail with race condition
 
 
     public static ErrorHandler initialize(MainActivity activity) {
@@ -53,7 +54,7 @@ class ErrorHandler implements View.OnClickListener {
         Snackbar errorReportSnackbar = Snackbar.make(mainActivity.findViewById(R.id.mainLayout),
                 R.string.reportErrorMessage, Snackbar.LENGTH_SHORT);
         errorReportSnackbar.setAction(R.string.reportButton, this);
-        errorReportSnackbar.setDuration(10000);
+        errorReportSnackbar.setDuration(mainActivity.getResources().getInteger(R.integer.snackbarTimeout));
         errorReportSnackbar.show();
     }
 

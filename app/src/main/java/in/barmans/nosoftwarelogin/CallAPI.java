@@ -44,9 +44,7 @@ public class CallAPI extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... params) {
-
         authenticate(params[0], params[1]);
-
         return null;
     }
 
@@ -57,7 +55,6 @@ public class CallAPI extends AsyncTask<String, String, String> {
             toastDisplay.showMessage(mainActivity.getString(R.string.logingIn));
             String data = mainActivity.getString(R.string.postData) + password;
             try {
-
                 urlConnection = setSslContext(apiUrl);
                 String result = "";
 
