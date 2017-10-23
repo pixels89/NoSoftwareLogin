@@ -4,18 +4,23 @@ import android.app.Activity;
 import android.os.AsyncTask;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
 
 import in.barmans.application3.R;
@@ -63,17 +68,20 @@ public class APITask extends AsyncTask<String, String, String> {
                 writer.flush();
                 writer.close();
 
-//                String result = "";
-//                InputStream in = urlConnection.getInputStream();
-//                InputStreamReader isw = new InputStreamReader(in);
-//                BufferedReader reader = new BufferedReader(isw);
-//                String read = "";
-//                while ((read = reader.readLine()) != null) {
-//                    result += read;
-//                }
-//                reader.close();
+                boolean fail = false;
+                InputStream in = urlConnection.getInputStream();
+                InputStreamReader isw = new InputStreamReader(in);
+                BufferedReader reader = new BufferedReader(isw);
+                String read = "";
+                while ((read = reader.readLine()) != null) {
+                    fail = read.contains("The User Name and Password combination you have entered is invalid");
+                    if (fail){
+                        break;
+                    }
+                }
+                reader.close();
 
-                if (urlConnection.getResponseCode() == 200) {
+                if (!fail) {
                     toastDisplayHandler.showMessage(mainActivity.getString(R.string.loggedIn));
                     FileOutputStream os = mainActivity.openFileOutput(mainActivity.getString(R.string.passwordFile), MODE_PRIVATE);
                     OutputStreamWriter sw = new OutputStreamWriter(os);
@@ -83,7 +91,10 @@ public class APITask extends AsyncTask<String, String, String> {
                 } else {
                     toastDisplayHandler.showMessage(mainActivity.getString(R.string.cantLogin));
                 }
-            } catch (Exception e) {
+            }catch (UnknownHostException uknown){
+                toastDisplayHandler.showMessage(mainActivity.getString(R.string.alreadyLoggedInOrNotInNetwork));
+            }
+            catch (Exception e) {
                 errorHandler.showPromptOnSnackbar(new Exception("\r\napiUrl: " + apiUrl + "\r\n data: " + data, e.getCause()));
             } finally {
                 if (urlConnection != null) {
@@ -99,7 +110,7 @@ public class APITask extends AsyncTask<String, String, String> {
 
     private HttpURLConnection setSslContext(String urlString) throws Exception {
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
-        InputStream caInput = mainActivity.getResources().openRawResource(R.raw.nosoftwarecrt);
+        InputStream caInput = mainActivity.getResources().openRawResource(R.raw.newcert);
 
         Certificate ca;
         try {
@@ -128,6 +139,15 @@ public class APITask extends AsyncTask<String, String, String> {
         HttpsURLConnection urlConnection =
                 (HttpsURLConnection) url.openConnection();
         urlConnection.setSSLSocketFactory(context.getSocketFactory());
+
+        HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+
+        urlConnection.setHostnameVerifier(hostnameVerifier);
 
         return urlConnection;
     }
